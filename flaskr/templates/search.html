@@ -1,14 +1,81 @@
 <!DOCTYPE html>
 <html>
+<head>
+  <title>Search Member</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      margin: 40px;
+    }
+
+    form {
+      background: white;
+      padding: 20px 30px;
+      border-radius: 8px;
+      max-width: 400px;
+      margin: auto;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      margin: 8px 0 16px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    input[type="submit"] {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    ul {
+      margin-top: 20px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+      background: #eaf2ff;
+      border-left: 4px solid #007BFF;
+      padding: 10px 20px;
+      border-radius: 4px;
+    }
+
+    li {
+      list-style: none;
+    }
+  </style>
+</head>
 <body>
 
-<form method="post">
-  <label for="mid">Enter Member ID:</label><br>
-  <input type="text" id="mid" name="mid" value="123456"><br>
-  <input type="submit" value="search">
-</form>
+  <form method="post">
+    <label for="mid">Enter Member ID:</label><br>
+    <input type="text" id="mid" name="mid" value="123456"><br>
+    <input type="submit" value="Search">
+  </form>
 
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul>
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
 
 </body>
 </html>
-

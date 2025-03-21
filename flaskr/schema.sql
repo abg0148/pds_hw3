@@ -98,9 +98,37 @@ INSERT INTO loan("mid","copyid","loandate","returndate") VALUES
 (1001,4036,'2023-01-16','2023-01-26'), (1002,4037,'2023-01-17',NULL), (1003,4038,'2023-01-18','2023-01-28'),
 (1004,4039,'2023-01-19','2023-01-29'), (1005,4040,'2023-01-20','2023-01-30');
 
-CREATE FUNCTION is_valid_mid(test_mid INTEGER) RETURNS INTEGER AS
-BEGIN
-       DECLARE is_valid INTEGER;
-       SELECT COUNT(DISTINCT(mid)) INTO is_valid FROM member WHERE mid = test_mid;
-       RETURN is_valid;
-END;
+create view everything as
+    select
+        m.mid,
+        b.bid, title, genre, year,
+        lb.lid, lname, laddress,
+        bc.copyid, l.loandate, l.returndate
+    from
+        member m,
+        book b,
+        library_branch lb,
+        book_copy bc,
+        loan l
+    where
+        m.mid = l.mid and
+        b.bid = bc.bid and
+        lb.lid = bc.lid and
+        bc.copyid = l.copyid
+    ;
+
+create view available_book_copies as
+select
+	bc.bid bid, title, bc.lid lid, bc.copyid copyid
+from
+	book b, book_copy bc left join loan l
+	on
+	bc.copyid	=	l.copyid
+where
+	-- either the book copy was never loaned from library OR
+	(((l.returndate is null)		and (l.loandate is null))
+	or
+	-- the book copy was loaned, but returned
+	((l.returndate is not null)	and (l.loandate is not null)))	and
+	b.bid		=	bc.bid
+;
